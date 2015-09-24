@@ -1,3 +1,10 @@
+# Temporary Fork for Nan2 + Electron Support
+
+To use include the follwing line in your dependencies in package.json:
+```
+    "node-serialport": "github:SimplyComplexCo/node-serialport#nan1to2"
+```
+
 ```
   eeeee eeeee eeeee eeee       e  eeeee
   8   8 8  88 8   8 8          8  8   "
