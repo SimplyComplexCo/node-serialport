@@ -17,7 +17,7 @@
   "main": "./serialport",
   "repository": {
     "type": "git",
-    "url": "git://github.com/SimplyComplex/node-serialport.git"
+    "url": "git://github.com/SimplyComplexCo/node-serialport.git"
   },
   "maintainers": [
     {
