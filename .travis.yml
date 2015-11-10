@@ -38,11 +38,12 @@ before_install:
 # download node if testing x86 architecture
 - if [[ "$ARCH" == "x86" ]]; then wget $BASE_URL/$X86_FILE.tar.gz; tar -xf $X86_FILE.tar.gz; export PATH=$X86_FILE/bin:$PATH; fi
 # reinstall npm and node-pre-gyp
-- npm install -g node-gyp node-pre-gyp node-pre-gyp-github
+- npm install -g node-gyp node-pre-gyp jacobrosenthal/node-pre-gyp-github#production
 # print versions
 - npm --version
 - node-gyp --version
 - node-pre-gyp --version
+- node-pre-gyp-github --help
 # use g++-4.8 on Linux
 - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
 - $CXX --version
@@ -51,12 +52,14 @@ before_install:
 # figure out if we should publish
 - PUBLISH_BINARY=false
 # if we are building a tag then publish
+- echo $TRAVIS_BRANCH
+- echo `git describe --tags --always HEAD`
+- echo $COMMIT_MESSAGE
 - if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]]; then PUBLISH_BINARY=true; fi;
+- echo "Publishing native platform Binary Package? ->" $PUBLISH_BINARY
 # or if we put [publish binary] in the commit message
 - if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE"; then PUBLISH_BINARY=true; fi;
-# If version is 0.9 do not publish to avoid duplicated binary error, caused by 0.9 and 0.10
-# returning same v number in node.js.
-- if [[ "$TRAVIS_NODE_VERSION" == '0.9' ]]; then PUBLISH_BINARY=false; fi;
+- echo "Publishing native platform Binary Package? ->" $PUBLISH_BINARY
 
 install:
 # ensure source install works
@@ -66,10 +69,11 @@ script:
 # test our module
 - node serialport.js
 - npm test
-- echo "Publishing native platform Binary Package? ->" $PUBLISH_BINARY
 # if publishing, do it
 - if [[ $PUBLISH_BINARY == true ]]; then node-pre-gyp package; fi;
 - if [[ $PUBLISH_BINARY == true ]]; then node-pre-gyp-github publish; fi;
 # cleanup
 - node-pre-gyp clean
 - node-gyp clean
+# test binary exists
+- if [[ $PUBLISH_BINARY == true ]]; then npm install --fallback-to-build=false; fi;
