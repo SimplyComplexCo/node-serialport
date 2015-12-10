@@ -74,7 +74,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "install": "node-pre-gyp rebuild --target=0.34.2 --arch=ia32 --dist-url=https://atom.io/download/ --runtime=electron",
+    "install": "node-pre-gyp rebuild --target=0.34.2 --arch=x64 --dist-url=https://atom.io/download/ --runtime=electron",
     "test": "grunt --verbose"
   }
 }
